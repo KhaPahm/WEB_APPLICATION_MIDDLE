@@ -1,6 +1,7 @@
 //LOAD BG_IMAGE
 const BG_IMG = new Image();
-BG_IMG.src = "./img/bg.jpg"
+BG_IMG.src = "./img/bg.png"
+
 
 const SCORE_IMG = new Image();
 SCORE_IMG.src = "./img/score.png"

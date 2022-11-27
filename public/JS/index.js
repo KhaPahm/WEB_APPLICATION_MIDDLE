@@ -1,307 +1,391 @@
-const cvs = document.getElementById("breakOut");
-const ctx = cvs.getContext("2d");
-
-//VARIABLES AND CONSTANTS
-const PADDLE_WIDTH = 100;
-const PADDLE_HEIGHT = 20;
-const PADDLE_MARGIN_BOTTOM = 50;
-let leftArrow = false;
-let rightArrow = false;
-const BALL_RADIUS = 8;
-let LIFE = 3;
-let bricks = [];
-let SCORE = 0;
-let LEVEL = 1;
-const SCORE_UNIT = 10;
-let GAME_OVER = false;
-const MAX_LEVEL = 3;
-
-
-
-//DRAW LINE
-ctx.lineWitdth = 3;
-
-//CREATE PADDLE
-const paddle = {
-    x: cvs.width / 2 - PADDLE_WIDTH / 2,
-    y: cvs.height - PADDLE_HEIGHT - PADDLE_MARGIN_BOTTOM,
-    width: PADDLE_WIDTH,
-    height: PADDLE_HEIGHT,
-    dx: 5
-}
-//DRAW PADDLE
-function drawPaddle() {
-    ctx.fillStyle = "#2e3548";
-    ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height)
-    ctx.strokeStyle = "#ffcd05";
-    ctx.strokeRect(paddle.x, paddle.y, paddle.width, paddle.height)
-}
-
-//CONTROL PADDLE
-document.addEventListener("keydown", function (event) {
-    if (event.keyCode == 37) {
-        leftArrow = true;
-    } else if (event.keyCode == 39) {
-        rightArrow = true;
+//CHECK USER HAVE BEEN LOGED IN 
+$.ajax({
+    url: '/checkLogin',
+    method: 'GET',
+    success: (data) => {
+        console.log(data);
+        if (data.loggedIn == false) {
+            // console.log('hehehehe');
+            $('#login-form').show();
+        } else {
+            // $("#black-layer").hide();    
+            $("#login-form").hide();
+            $('#menu').show(1200)
+            $('.user').text(data.data.username)
+            if (data.data.level < 1) {
+                $('#continue').prop('disabled', true);
+            }
+            // play();
+        }
     }
 })
 
-document.addEventListener("keyup", function (event) {
-    if (event.keyCode == 37) {
-        leftArrow = false;
-    } else if (event.keyCode == 39) {
-        rightArrow = false;
-    }
-})
-
-//MOVE PADDLE
-function movePaddle() {
-    if (rightArrow && paddle.x + paddle.width < cvs.width) {
-        paddle.x += paddle.dx;
-    } else if (leftArrow && paddle.x > 0) {
-        paddle.x -= paddle.dx;
-    }
-}
-
-
-//CREAT BALL
-const ball = {
-    x: cvs.width / 2,
-    y: paddle.y - BALL_RADIUS,
-    radius: BALL_RADIUS,
-    speed: 4,
-    dx: 3 * (Math.random() * 2 - 1),
-    dy: -3
-}
-
-// DRAW THE BALL
-function drawBall() {
-    ctx.beginPath();
-    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-    ctx.fillStyle = "#ffcd05";
-    ctx.fill();
-    ctx.strokeStyle = "#2e3548";
-    ctx.stroke();
-    ctx.closePath();
-}
-
-//MOVE BALL
-function moveBall() {
-    ball.x += ball.dx;
-    ball.y += ball.dy
-}
-
-function ballWallCollision() {
-    if (ball.x + ball.radius > cvs.width || ball.x - ball.radius < 0) {
-        ball.dx = -ball.dx;
-        WALL_HIT.play();
-    }
-    if (ball.y - ball.radius < 0) {
-        ball.dy = -ball.dy;
-    }
-
-    if (ball.y + ball.radius > cvs.height) {
-        LIFE--;
-        LIFE_LOST.play();
-        resetBall();
-    }
-}
-
-function resetBall() {
-    ball.x = cvs.width / 2;
-    ball.y = paddle.y - BALL_RADIUS;
-
-    ball.dy = -3
-}
-
-function ballPaddleCollision() {
-    if (ball.y > paddle.y && ball.y < paddle.y + paddle.height && ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
-        PADDLE_HIT.play();
-        let collidePoint = ball.x - (paddle.x + paddle.width / 2);
-        collidePoint = collidePoint / (paddle.width / 2)
-        let angle = collidePoint * (Math.PI / 3) //call angle for speed of ball
-        ball.dx = ball.speed * Math.sin(angle);
-        ball.dy = -ball.speed * Math.cos(angle);
-
-    }
-}
-
-//CREATE BRICK
-const brick = {
-    row: 1,
-    column: 5,
-    width: 55,
-    height: 20,
-    offSetLeft: 20,
-    offSetTop: 20,
-    marginTop: 40,
-    fillColor: '#2e3457',
-    strokeColor: '#fff'
-}
-
-//CREATE LIST BRICKS
-function createBricks() {
-    for (let r = 0; r < brick.row; r++) {
-        bricks[r] = []
-        for (let c = 0; c < brick.column; c++) {
-            bricks[r][c] = {
-                x: c * (brick.width + brick.offSetLeft) + brick.offSetLeft,
-                y: r * (brick.height + brick.offSetTop) + brick.offSetTop + brick.marginTop,
-                status: true
-            }
+//SIGN UP
+function checkSignIn() {
+    if ($('#user').val() == "" || $('#password').val() == "" || $('#confim-password').val() == "") {
+        alert("You missed some information! Please fill all informaion to sign up!");
+        if ($('#user').val() == "") {
+            $('#user').addClass('null-input');
         }
-    }
-}
 
-createBricks();
-
-//DRAW BRICKS
-function drawBricks() {
-    for (let r = 0; r < brick.row; r++) {
-        for (let c = 0; c < brick.column; c++) {
-            if (bricks[r][c].status) {
-                ctx.fillStyle = brick.fillColor;
-                ctx.fillRect(bricks[r][c].x, bricks[r][c].y, brick.width, brick.height)
-                ctx.strokeStyle = brick.strokeColor;
-                ctx.strokeRect(bricks[r][c].x, bricks[r][c].y, brick.width, brick.height)
-            }
+        if ($('#password').val() == "") {
+            $('#password').addClass('null-input');
         }
+
+        if ($('#confim-password').val() == "") {
+            $('#confim-password').addClass('null-input');
+        }
+        return false;
+    }
+
+    if ($('#password').val() != $('#confim-password').val()) {
+        alert("Your confirm password is wrong! Please entry again!");
+        $('#confim-password').addClass('null-input');
+        return false;
+    }
+
+    return true
+}
+
+//CHECK CONFIRM PASSWORD HAVE TO MATCH WITH PASSWORD
+function checkPassword() {
+    if ($('#password').val() != $('#confim-password').val()) {
+        $('#confim-password').addClass('null-input');
+    } else {
+        $('#confim-password').removeClass('null-input');
+
     }
 }
 
-function ballBrickCollision() {
-    for (let r = 0; r < brick.row; r++) {
-        for (let c = 0; c < brick.column; c++) {
-            if (bricks[r][c].status) {
-                let b = bricks[r][c];
-                if (ball.x + ball.radius > b.x
-                    && ball.x - ball.radius < b.x + brick.width
-                    && ball.y - ball.radius < b.y + brick.height) {
-                    BRICK_HIT.play();
-                    b.status = false;
-                    ball.dy = - ball.dy;
-                    SCORE += SCORE_UNIT;
+//CALL FUNTCTION CHECK PASSWORD WHEN USER ENTRY TEXT FROM KEYBOARD
+$('#confim-password').keyup(checkPassword)
+
+//CLICK SIGN UP BUTTON
+$('#btn-signup').click(() => {
+    // console.log();
+    if (checkSignIn()) {
+        let user = $('#user').val();
+        let pwd = $('#password').val();
+        $.ajax({
+            url: '/signup',
+            method: "POST",
+            data: $('#form-signup').serialize(),
+            dataType: "JSON",
+            success: (data) => {
+                if (data.status == false) {
+                    alert('Username have been use by another one! Please change your username!');
+                    $('#user').addClass('null-input');
+                } else {
+                    alert('Sign up done!');
                 }
             }
-        }
+        })
     }
-}
-
-function showGameStarts(text, textX, textY, img, imgX, imgY) {
-    ctx.fillStyle = "#FFF"
-    ctx.font = "25px Montserrat"
-    ctx.fillText(text, textX, textY);
-    ctx.drawImage(img, imgX, imgY, 25, 25);
-}
-
-
-function levelUp() {
-    let isLevelDone = true;
-    for (let r = 0; r < brick.row; r++) {
-        for (let c = 0; c < brick.column; c++) {
-            isLevelDone = isLevelDone && (!bricks[r][c].status);
-        }
-    }
-
-    if (isLevelDone) {
-        WIN.play();
-        brick.row++;
-        createBricks();
-        ball.speed += 0.5;
-        resetBall();
-        LEVEL++;
-
-        if (LEVEL >= MAX_LEVEL) {
-            GAME_OVER = true;
-            showYouWin();
-            return
-        }
-
-    }
-}
-
-
-function gameOver() {
-    if (LIFE <= 0) {
-        showYouLose();
-        GAME_OVER = true;
-    }
-}
-
-
-//DRAW function
-function draw() {
-    drawPaddle();
-    drawBall();
-    drawBricks();
-    showGameStarts(SCORE, 35, 25, SCORE_IMG, 5, 5)
-    showGameStarts(LIFE, cvs.width - 25, 25, LIFE_IMG, cvs.width - 55, 5)
-    showGameStarts(LEVEL, cvs.width / 2, 25, LEVEL_IMG, cvs.width / 2 - 30, 5)
-}
-
-//UPDATE function
-function update() {
-    movePaddle();
-    moveBall();
-    ballWallCollision();
-    ballPaddleCollision();
-    ballBrickCollision();
-    gameOver();
-    levelUp();
-}
-
-
-function loop() {
-
-    ctx.drawImage(BG_IMG, 0, 0);
-
-    draw();
-    update();
-    if (!GAME_OVER) {
-        requestAnimationFrame(loop)
-    }
-}
-
-loop()
-
-
-const soundE = document.getElementById('sound');
-
-soundE.addEventListener("click", audioManager);
-
-function audioManager() {
-    let imgSrc = soundE.getAttribute("src");
-    let SOUND_IMG = imgSrc == "./img/SOUND_ON.png" ? "./img/SOUND_OFF.png" : "./img/SOUND_ON.png";
-    soundE.setAttribute("src", SOUND_IMG);
-
-    WALL_HIT.muted = WALL_HIT.muted ? false : true;
-    PADDLE_HIT.muted = PADDLE_HIT.muted ? false : true;
-    BRICK_HIT.muted = BRICK_HIT.muted ? false : true;
-    WIN.muted = WIN.muted ? false : true;
-    LIFE_LOST.muted = LIFE_LOST.muted ? false : true;
-}
-
-//
-const gameover = document.getElementById('gameover');
-const youwon = document.getElementById('youwon');
-const youlose = document.getElementById('youlose');
-const restart = document.getElementById('restart');
-
-restart.addEventListener("click", function () {
-    location.reload();
 })
 
-function showYouWin() {
-    gameover.style.display = "block";
-    youwon.style.display = "block";
+//ANIMATION TO BACK SIGNIN PAGE
+$('#back-signup').click(() => {
+    $('#signup-form').hide(1200);
+    $('#login-form').animate({
+        top: '0px',
+        opacity: '1'
+    }, 1200)
+    $('#form-signup').trigger("reset");
+    $('#confim-password').removeClass('null-input');
+    $('#password').removeClass('null-input');
+    $('#user').removeClass('null-input');
+})
+
+//ANIMATION TRANS TO SIGN UP PAGE FROM SIGN IN PAGE
+$('#signUp').click(() => {
+    $('#login-form').animate({
+        top: '100px',
+        opacity: '0'
+    }, 1200)
+
+    setTimeout(() => {
+        $('#signup-form').show(1200)
+    }, 400);
+})
+
+//FORGOT PASSWORD ANIMATION
+$('#forgotPass').click(() => {
+    $('#login-form').animate({
+        top: '100px',
+        opacity: '0'
+    }, 1200)
+
+    setTimeout(() => {
+        $('#forgot').show(1200)
+    }, 400);
+})
+
+//ANIMATION BACK TO SIGN IN PAGE FROM FORGOT PASSWORD
+$('#back-forgot').click(() => {
+    $('#forgot').hide(1200);
+    $('#login-form').animate({
+        top: '0px',
+        opacity: '1'
+    }, 1200)
+    $('#forgot').trigger("reset");
+    $('#confim-passwordForgot').removeClass('null-input');
+    $('#passwordForgot').removeClass('null-input');
+    $('#userForgot').removeClass('null-input');
+})
+
+//FORGOT PASSWORD CHECK
+function checkForgot() {
+    if ($('#userForgot').val() == "" || $('#passwordForgot').val() == "" || $('#confim-passwordForgot').val() == "") {
+        alert("You missed some information! Please fill all informaion to sign up!");
+        if ($('#userForgot').val() == "") {
+            $('#userForgot').addClass('null-input');
+        }
+
+        if ($('#passwordForgot').val() == "") {
+            $('#passwordForgot').addClass('null-input');
+        }
+
+        if ($('#confim-passwordForgot').val() == "") {
+            $('#confim-passwordForgot').addClass('null-input');
+        }
+        return false;
+    }
+
+    if ($('#passwordForgot').val() != $('#confim-passwordForgot').val()) {
+        alert("Your confirm password is wrong! Please entry again!");
+        $('#confim-passwordForgot').addClass('null-input');
+        return false;
+    }
+
+    return true
 }
 
-function showYouLose() {
-    gameover.style.display = "block";
-    youlose.style.display = "block";
+//CHECK CONFIRM PASSWORD HAVE TO MATCH WITH PASSWORD
+function checkForgotPassword() {
+    if ($('#passwordForgot').val() != $('#confim-passwordForgot').val()) {
+        $('#confim-passwordForgot').addClass('null-input');
+    } else {
+        $('#confim-passwordForgot').removeClass('null-input');
+
+    }
+}
+
+$('#confim-passwordForgot').keyup(checkForgotPassword)
+
+$('#btn-passwordForgot').click(() => {
+    if (checkForgot) {
+        $.ajax({
+            url: '/forgotPass',
+            method: 'POST',
+            data: $('#form-forgot').serialize(),
+            dataType: 'JSON',
+            success: (data) => {
+                if(data.status) {
+                    alert("Your account have changed pass word! Sign in again!");
+                    location.reload();
+                } else {
+                    alert("Couldn't find your username account! Please try again!");
+                    $('#userForgot').addClass('null-input');
+                }
+            }
+        })
+    }
+})
+
+//SIGN IN BUTTON CLICK
+$('#username-si').keyup(() => {
+    $('#username-si').removeClass('null-input')
+})
+
+$('#password-si').keyup(() => {
+    $('#password-si').removeClass('null-input')
+})
+
+$('#btn-signin').click(() => {
+    if ($('#username-si').val() == "" || $('#password-si').val() == "") {
+        alert("You missed some information! Please fill all informaion to sign up!");
+        if ($('#username-si').val() == "") {
+            $('#username-si').addClass('null-input');
+        }
+
+        if ($('#password-si').val() == "") {
+            $('#password-si').addClass('null-input');
+        }
+    } else {
+        $.ajax({
+            url: '/signin',
+            method: 'POST',
+            data: $('#form-signin').serialize(),
+            dataType: "JSON",
+            success: (data) => {
+                if (!data.status) {
+                    alert("WRONG USERNAME OR PASSWORD!")
+                } else {
+                    $("#login-form").hide(1200);
+                    setTimeout(() => {
+                        $("#menu").show(1200);
+                    }, 400)
+                    $('.user').text(data.data.username)
+                    if (data.data.level < 1) {
+                        $('#continue').prop('disabled', true);
+                    }
+                }
+            }
+        })
+    }
+})
+
+$('#logout-confirm').click(() => {
+    $.ajax({
+        url: '/logout',
+        method: 'GET',
+        success: (data) => {
+            if (data.status) {
+                $("#menu").hide(1200);
+                setTimeout(() => {
+                    $("#login-form").show(1200);
+                }, 400)
+            }
+        }
+    })
+})
+
+function newGame_reload() {
+    $.ajax({
+        url: '/newGame',
+        method: 'POST',
+        success: () => {
+            $('#menu').hide(1200);
+            setTimeout(() => {
+                $('#black-layer').hide(500)
+                GAME_OVER = false;
+                playGame(1, 1, 0);
+            }, 400)
+        }
+    })
+}
+
+$('#newgame').click(() => {
+    newGame_reload();
+})
+
+$('#changepassword').click(() => {
+    $('#menu').animate({
+        top: '100px',
+        opacity: '0'
+    }, 1200)
+
+    setTimeout(() => {
+        $('#changePass').show(1200)
+    }, 400);
+})
+
+//CHECK CONFIRM PASSWORD HAVE TO MATCH WITH PASSWORD
+function checkPasswordChange() {
+    if ($('#passwordChange').val() != $('#confim-passwordChange').val()) {
+        $('#confim-passwordChange').addClass('null-input');
+    } else {
+        $('#confim-passwordChange').removeClass('null-input');
+
+    }
+}
+
+//CALL FUNTCTION CHECK PASSWORD WHEN USER ENTRY TEXT FROM KEYBOARD
+$('#confim-passwordChange').keyup(checkPasswordChange)
+
+$('#back-menu').click(() => {
+    $('#changePass').hide(1200);
+    $('#menu').animate({
+        top: '0px',
+        opacity: '1'
+    }, 1200)
+    $('#form-changepass').trigger("reset");
+    $('#confim-passwordChange').removeClass('null-input');
+    $('#passwordChange').removeClass('null-input');
+})
+
+function checkChangePass() {
+    if ($('#oldpass').val() == "" || $('#passwordChange').val() == "" || $('#confim-passwordChange').val() == "") {
+        alert("You missed some information! Please fill all informaion to sign up!");
+        if ($('#oldpass').val() == "") {
+            $('#oldpass').addClass('null-input');
+        }
+
+        if ($('#passwordChange').val() == "") {
+            $('#passwordChange').addClass('null-input');
+        }
+
+        if ($('#confim-passwordChange').val() == "") {
+            $('#confim-passwordChange').addClass('null-input');
+        }
+        return false;
+    }
+
+    if ($('#oldpass').val() == $('#passwordChange').val()) {
+        alert("Your new password must be different with old password! Please entry again!");
+        $('#passwordChange').addClass('null-input')
+        return false;
+    }
+
+    if ($('#passwordChange').val() != $('#confim-passwordChange').val()) {
+        alert("Your confirm password is wrong! Please entry again!");
+        $('#confim-passwordChange').addClass('null-input');
+        return false;
+    }
+
+    return true
 }
 
 
+$('#btn-changePass').click(() => {
+    if (checkChangePass()) {
+        $.ajax({
+            url: '/changePass',
+            method: 'POST',
+            data: $('#form-changepass').serialize(),
+            dataType: 'JSON',
+            success: (data) => {
+                if (data.status) {
+                    alert("Your password has changed!");
+                    location.reload();
+                } else {
+                    alert("Your old password isn't correct!");
+                    $('#oldpass').addClass('null-input')
+                }
+            }
+        })
+    }
+})
 
+$('#restart').click(() => {
+    $('#continue').prop('disabled', true);
+    $('#gameover').hide();
+    $('#black-layer').show();
+    newGame_reload();
+})
+
+$('#continue').click(() => {
+    $.ajax({
+        url: '/getstate',
+        method: 'GET',
+        success: (data) => {
+            if (data.status) {
+                $('#menu').hide(1200);
+                setTimeout(() => {
+                    $('#black-layer').hide(500)
+                    GAME_OVER = false;
+                    playGame(data.level, data.life, data.score);
+                }, 400)
+            }
+        }
+    })
+})
+
+$('#showmenu').click(() => {
+    $('#continue').prop('disabled', true);
+    $('#gameover').hide();
+    $('#black-layer').show();
+    $('#menu').show(1000)
+})
 
 

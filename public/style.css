@@ -5,46 +5,310 @@ body {
 
 #sounds {
     position: absolute;
-    width: 400px;
-    height: 500px;
+    width: calc(100vh - 50px);
+    height: calc(100vh - 50px);
 }
 
 #sound {
     width: 30px;
     position: absolute;
-    top: 456px;
+    top: calc(100vh - 100px);
     left: 15px;
 }
 
 #gameover {
     position: absolute;
-    width: 400px;
-    height: 500px;
+    width: calc(100vh - 50px);
+    height: calc(100vh - 50px);
     background: rgba(0, 0, 0, 0.5);
     display: none;
 }
 
 #youwon {
-    width: 100px;
+    font-size: calc(100vh/8);
     position: absolute;
-    top: 200px;
-    left: 150px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    top: 35%;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    color: #fdd813;
+    text-shadow: 16px 22px 11px rgba(168, 158, 32, 0.8);
     display: none;
 }
 
 #youlose {
-    width: 400px;
+    font-size: calc(100vh/7);
     position: absolute;
-    top: 100px;
-    left: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    top: 35%;
+    text-align: center;
+    font-family: 'Rubik Glitch', cursive;
+    color: #8a0512;
+    text-shadow: 2px 2px #000000;
     display: none;
 }
 
-#restart {
+.option-gameover {
     position: absolute;
-    top: 350px;
-    left: 155px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
     cursor: pointer;
-    font-size: 1.25em;
-    color: #fff;
+    font-size: 1.5em;
+    color: #ffffff;
+    text-shadow: 2px 2px #000000;
+    font-family: 'Rubik Glitch', cursive;
+}
+
+#restart {
+    top: 55%;
+}
+
+#showmenu {
+    top: 60%;
+}
+
+
+
+/* class to use in forms */
+.button {
+    width: calc(100vh/3);
+    background-color: transparent;
+    border: 1px solid #ffffff;
+    border-radius: 10px;
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    color: #ffffff;
+    height: 3rem;
+}
+
+.button:hover {
+    background-color: #ffffff;
+    color: #000;
+    font-weight: bolder;
+}
+
+.button:disabled,
+button[disabled] {
+    font-weight: normal;
+    border: 1px solid #000000;
+    background-color: #cccccc;
+    color: #ffffff;
+}
+
+.userName {
+    top: 30%;
+}
+
+.password {
+    top: 37%;
+}
+
+::placeholder {
+    color: #ffffff;
+    opacity: 1;
+}
+
+.inputForm {
+    width: calc(100vh/3);
+    border: 1px solid #ffffff;
+    border-radius: 10px;
+
+    height: 3rem;
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: start;
+    background-color: transparent;
+    outline-color: #ffffff;
+    padding-left: 0.5rem;
+    color: #ffffff;
+}
+
+.iconUser {
+    color: #ffffff;
+    font-size: 2.5em;
+    font-family: 'Rubik Glitch', cursive;
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+    top: 23%;
+    text-shadow: 0 0px 0px #dfdfdf,
+        -1px 0px 0px #b8b8b8,
+        -2px 0px 0px #979797,
+        -3px 0px 0px #747474,
+        -4px 0px 0px #565656,
+        -5px 0px 0px #343434,
+        -6px 0px 0px #171717,
+        -7px 0px 0px #000;
+
+}
+
+/*Login Form */
+#black-layer {
+    position: absolute;
+    width: calc(100vh - 50px);
+    height: calc(100vh - 50px);
+    background: rgba(0, 0, 0, 0.8);
+}
+
+#login-form {
+    position: absolute;
+    width: calc(100vh - 50px);
+    height: calc(100vh - 50px);
+    z-index: 1;
+    display: none;
+}
+
+
+#line-underform {
+    width: calc(100vh/3);
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    top: 43%;
+    border-top: 2px solid #ffffff;
+    background-color: #ffffff;
+}
+
+.options {
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.options:hover {
+    font-weight: bolder;
+    font-style: italic;
+    text-decoration: underline;
+}
+
+#signUp {
+    top: 53%;
+}
+
+#forgotPass {
+    top: 56%;
+}
+
+.btnSignIn {
+    top: 47%;
+}
+
+/* SIGN UP FORM */
+#signup-form {
+    position: absolute;
+    width: calc(100vh - 50px);
+    height: calc(100vh - 50px);
+    z-index: 1;
+    display: none;
+}
+
+.confim-password {
+    top: 44%;
+}
+
+.btnSignUp {
+    top: 51%;
+}
+
+.back {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    font-size: 2em;
+    color: #ffffff;
+}
+
+/* NULL INPUT */
+.null-input {
+    border-color: red;
+    outline-color: red;
+}
+
+/* MENU */
+#menu {
+    position: absolute;
+    width: calc(100vh - 50px);
+    height: calc(100vh - 50px);
+    z-index: 1;
+    display: none;
+}
+
+#continue {
+    top: 32%;
+}
+
+#newgame {
+    top: 40%;
+}
+
+#history {
+    top: 48%;
+}
+
+#changepassword {
+    top: 56%;
+}
+
+#logout {
+    top: 64%;
+}
+
+.welcome {
+    color: #ffffff;
+    font-size: 2.5em;
+    font-family: 'Poppins', sans-serif;
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+    top: 15%;
+    text-shadow: 6px 6px 0px #000000;
+    /* display: none; */
+}
+
+.user {
+    color: #fdd813;
+}
+
+#changePass {
+    position: absolute;
+    width: calc(100vh - 50px);
+    height: calc(100vh - 50px);
+    z-index: 1;
+    display: none;
+}
+
+#forgot {
+    position: absolute;
+    width: calc(100vh - 50px);
+    height: calc(100vh - 50px);
+    z-index: 1;
+    display: none;
 }

@@ -2,37 +2,162 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS FILE -->
     <link rel="stylesheet" href="./style.css">
 
+    <!-- BOOTSTRAP -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+
+    <!-- GOOGLE FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200&family=Poppins:ital,wght@1,900&family=Rubik+Glitch&display=swap"
+        rel="stylesheet">
 
+    <!-- FONTAWESOME -->
+    <script src="https://kit.fontawesome.com/b47a1c1ea4.js" crossorigin="anonymous"></script>
 
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.1.js"
+        integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+
+    <!-- TITLE  -->
     <title>2D Breakout Game</title>
 </head>
 
 <body>
+    <div id="black-layer"></div>
+    <div id="login-form">
+        <div class="iconUser">
+            SIGN IN
+        </div>
+        <form id="form-signin" method="POST" onsubmit="return false;">
+            <input type="text" class="inputForm userName" placeholder="Username" id="username-si" name="username"
+                value="">
+            <input type="password" class="inputForm password" placeholder="Password" id="password-si" name="password"
+                value="">
+            <input type="submit" value="SIGN IN" class="button btnSignIn" id="btn-signin">
+        </form>
+        <hr id="line-underform">
+        <div class="options" id="signUp">Sign up?</div>
+        <div class="options" id="forgotPass">Forgot Password</div>
+    </div>
+
+    <div id="signup-form">
+        <i class="fa-solid fa-angle-left back" id="back-signup"></i>
+        <div class="iconUser">
+            SIGN UP
+        </div>
+        <form id="form-signup" method="POST" onsubmit="return false;">
+            <input type="text" class="inputForm userName" placeholder="Username" id="user" value="" name="username">
+            <input type="password" class="inputForm password" placeholder="Password" id="password" value=""
+                name="password">
+            <input type="password" class="inputForm confim-password" placeholder="Confirm Password" id="confim-password"
+                name="confimPassword" value="">
+            <input type="submit" value="SIGN UP" class="button btnSignUp" id="btn-signup">
+        </form>
+    </div>
+
+    <div id="forgot">
+        <i class="fa-solid fa-angle-left back" id="back-forgot"></i>
+        <div class="iconUser">
+            FORGOT PASSWORD
+        </div>
+        <form id="form-forgot" method="POST" onsubmit="return false;">
+            <input type="text" class="inputForm userName" placeholder="User Name" value="" name="username"
+                id="userForgot">
+            <input type="password" class="inputForm password" placeholder="New Password" value="" name="newpass"
+                id="passwordForgot">
+            <input type="password" class="inputForm confim-password" placeholder="Confirm New Password"
+                id="confim-passwordForgot" name="newconfimpass" value="">
+            <input type="submit" value="GET NEW PASSWORD" class="button btnSignUp" id="btn-passwordForgot">
+        </form>
+    </div>
+
+    <div id="menu">
+        <div class="welcome">
+            WELCOME BACK <p class="user"></p>
+        </div>
+
+        <button class="button" id="continue">CONTINUTE</button>
+        <button class="button" id="newgame">NEW GAME</button>
+        <button class="button" id="history">HISTORY</button>
+        <button class="button" id="changepassword">CHANGE PASSWORD</button>
+        <button class="button" id="logout" data-bs-toggle="modal" data-bs-target="#exampleModal">LOG OUT</button>
+    </div>
+
+    <div id="changePass">
+        <i class="fa-solid fa-angle-left back" id="back-menu"></i>
+        <div class="iconUser">
+            CHANGE PASSWORD
+        </div>
+        <form id="form-changepass" method="POST" onsubmit="return false;">
+            <input type="password" class="inputForm userName" placeholder="Old Password" value="" name="oldpass"
+                id="oldpass">
+            <input type="password" class="inputForm password" placeholder="New Password" value="" name="newpass"
+                id="passwordChange">
+            <input type="password" class="inputForm confim-password" placeholder="Confirm New Password"
+                id="confim-passwordChange" name="newconfimpass" value="">
+            <input type="submit" value="CHANGE PASSWORD" class="button btnSignUp" id="btn-changePass">
+        </form>
+    </div>
+
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">LOG OUT</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>You'll be LOG OUT! Are you sure?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCLE</button>
+                    <button type="button" class="btn btn-primary" id="logout-confirm" data-bs-dismiss="modal">LOG
+                        OUT</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div id="sounds">
         <img src="./img/SOUND_ON.png" alt="" id="sound">
     </div>
-    
+
     <div id="gameover">
-        <img src="./img/youwon.png" alt="" id="youwon">
-        <img src="./img/gameover.png" alt="" id="youlose">
-        <div id="restart"> Play Again!
+        <div id="youwon">
+            🏆YOU WIN🏆
         </div>
+        <div id="youlose">
+            GAME OVER
+        </div>
+        <div id="restart" class="option-gameover"> Play Again! ↺</div>
+        <div id="showmenu" class="option-gameover"> MENU </div>
     </div>
-    <canvas id="breakOut" width="400" height="500" style="border: #000000 1px solid; ">
+
+
+    <canvas id="breakOut" style="border: #000000 1px solid; ">
 
     </canvas>
 
 </body>
 
 <script src="./JS/components.js"></script>
+<script src="./JS/game.js"></script>
 <script src="./JS/index.js"></script>
 
 </html>
