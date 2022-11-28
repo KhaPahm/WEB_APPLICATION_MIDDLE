@@ -312,3 +312,44 @@ button[disabled] {
     z-index: 1;
     display: none;
 }
+
+#history-frame {
+    position: absolute;
+    width: calc(100vh - 50px);
+    height: calc(100vh - 50px);
+    z-index: 1;
+    display: none;
+}
+
+.history-content {
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    width: 50vh;
+    display: flex;
+    justify-content: space-between;
+    color: #ffffff;
+    border: #ffffff 1px solid;
+    border-radius: 10px;
+    height: 3rem;
+    text-align: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+.history-content:hover {
+    color: #000;
+    background-color: #ffffff;
+    font-weight: bolder;
+}
+
+.title {
+    font-family: 'Poppins', sans-serif;
+    color: #fdd813;
+}
+
+#title-history {
+    top: 15%;
+}

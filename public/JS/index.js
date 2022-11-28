@@ -180,7 +180,7 @@ $('#btn-passwordForgot').click(() => {
             data: $('#form-forgot').serialize(),
             dataType: 'JSON',
             success: (data) => {
-                if(data.status) {
+                if (data.status) {
                     alert("Your account have changed pass word! Sign in again!");
                     location.reload();
                 } else {
@@ -259,7 +259,7 @@ function newGame_reload() {
             setTimeout(() => {
                 $('#black-layer').hide(500)
                 GAME_OVER = false;
-                playGame(1, 1, 0);
+                playGame(1, 5, 0);
             }, 400)
         }
     })
@@ -388,4 +388,49 @@ $('#showmenu').click(() => {
     $('#menu').show(1000)
 })
 
+$('#history').click(() => {
+    $('#menu').animate({
+        top: '100px',
+        opacity: '0'
+    }, 1200)
+
+    setTimeout(() => {
+        $('#history-frame').show(1200)
+    }, 400);
+
+
+    $.ajax({
+        url: '/history',
+        method: 'GET',
+        success: (data) => {
+            html = ''
+            count = 0;
+            data.data.forEach(element => {
+                let status;
+                if (element.level == 5 && element.state > 0) {
+                    status = "WIN"
+                } else {
+                    status = "LOSE"
+                }
+                html += "<div class='history-content' top='100px' style='top: " + (23 + count * 8) + "%'>" +
+                    "<div class='title'>" + status + "</div>" +
+                    "<div> 📆 " + element.date + " </div>" +
+                    "<div> 🏆 " + element.level + " </div>" +
+                    "<div> 💖 " + element.state + " </div>" +
+                    "<div> 💯 " + element.score + " </div> </div>";
+                count++;
+            });
+
+            $('#box-history').html(html)
+        }
+    })
+})
+
+$('#back-history').click(() => {
+    $('#history-frame').hide(1200);
+    $('#menu').animate({
+        top: '0px',
+        opacity: '1'
+    }, 1200)
+})
 

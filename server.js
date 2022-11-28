@@ -73,6 +73,14 @@ app.get('/getstate', async (request, response) => {
     })
 })
 
+app.get('/history', async (request, response) => {
+    const decode = jwt.verify(request.cookies.userRegisterd, 'webmidterm-123#@%');
+    connection.query("select * from history where username = ? order by id desc limit 5", [decode.username], (err, res) => {
+        if (err) throw err;
+        response.json({ status: true, data: res })
+    })
+})
+
 app.post("/signup", async (request, response, next) => {
     var userName = request.body.username;
     // console.log(request.body.password);
