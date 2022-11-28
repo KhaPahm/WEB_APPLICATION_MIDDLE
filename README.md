@@ -9,7 +9,7 @@ STEP 4: open terminal/cmd in file </br>
 <br>
 STEP 5: entry <b>"npm run"</b> to your terminal/cmd </br>
 <br>
-STEP 6: if your terminal/cmd display "Server started on port 3000" and "MySQL Database is connected Successfully", your server is run. </br>
+STEP 6: if your terminal/cmd display <i>"Server started on port 3000"</i> and <i>"MySQL Database is connected Successfully"</i>, server is running. </br>
 <br>
 STEP 7: open your browers and go to: "http://localhost:3000/" </br>
 <br>
